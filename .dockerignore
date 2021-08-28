@@ -1,0 +1,7 @@
+postgresql-data
+db
+rvp
+.git
+Dockerfile
+.Dockerfile.swp
+docker-compose.yml

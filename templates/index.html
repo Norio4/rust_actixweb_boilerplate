@@ -1,0 +1,35 @@
+<!DOCTYPE>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Boiler Todo App</title>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/uikit@3.7.2/dist/css/uikit.min.css" />
+    </head>
+    <body>
+        <h2>Todo Boiler Sample</h2>
+        <div class="uk-container">
+            <h3>一覧</h3>
+            <div class="uk-description-list uk-description-list-divider">
+                {% for item in items %}
+                    <div>id: {{ item.id }}, {{ item.text }}</div>
+                    <form action="/delete" method="POST">
+                      <input type="hidden" name="id" value="{{ item.id }}">
+                      <button class="uk-button uk-button-danger uk-button-small">削除</button>
+                    </form>
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="uk-container">
+            <h3>新規作成</h3>
+            <form action="/" method="POST">
+                <div>
+                    <input class="uk-input" name="text">
+                </div>
+                <div>
+                    <button class="uk-button uk-button-default">追加</button>
+                </div>
+            </form>
+        </div>
+    </body>
+</html>

@@ -1,0 +1,54 @@
+version: "3.4"
+services:
+  app:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+      target: ${BUILD_STAGE}
+    image: webapp_${BUILD_STAGE}
+    command: webapp-service
+    environment:
+      - DATABASE_URL=postgres://${DATABASE_USER}:${DATABASE_PASSWORD}@${DATABASE_HOST}:${DATABASE_PORT}/${DATABASE_NAME}
+    links:
+      - db
+    networks:
+      - backend
+      - frontend
+
+  rvp:
+    build:
+      context: ./rvp
+      dockerfile: Dockerfile
+    volumes:
+      - ./rvp/front/:/etc/nginx/front:z
+    ports:
+     - 8888:80
+    depends_on:
+      - app
+    links:
+      - app
+    networks:
+      - frontend
+
+  db:
+    build: ./db
+    volumes:
+     - ./postgresql-data:/var/lib/postgresql/data:z
+    tty: true
+    restart: always
+    environment:
+      - "POSTGRES_USER=${DATABASE_USER}"
+      - "POSTGRES_PASSWORD=${DATABASE_PASSWORD}"
+      - "POSTGRES_DB=${DATABASE_NAME}"
+    networks:
+      - backend
+
+networks:
+  frontend:
+    driver: bridge
+    ipam:
+      driver: default
+  backend:
+    driver: bridge
+    ipam:
+      driver: default

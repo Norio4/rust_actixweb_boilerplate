@@ -1,8 +1,10 @@
 #[macro_use] extern crate diesel_migrations;
+extern crate rust_actixweb_boilerplate as app;
+
+use crate::app::util::{establish_connection, init_pool};
+use crate::app::routes;
 use actix_web::{App, HttpServer, middleware::Logger};
 use dotenv::dotenv;
-use crate::util::{establish_connection, init_pool};
-use crate::routes;
 use env_logger;
 
 #[actix_rt::main]

@@ -3,6 +3,7 @@ name = "rust_actixweb_boilerplate"
 version = "0.1.0"
 edition = "2018"
 authors = ["Norio4"]
+categories = ["rust", "actix_web", "diesel", "boilerplate"]
 license = "MIT"
 
 [dependencies]

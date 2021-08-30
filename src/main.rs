@@ -5,7 +5,6 @@ use crate::app::util::{establish_connection, init_pool};
 use crate::app::routes;
 use actix_web::{App, HttpServer, middleware::Logger};
 use dotenv::dotenv;
-use env_logger;
 
 #[actix_rt::main]
 async fn main() -> Result<(), actix_web::Error> {
@@ -22,7 +21,7 @@ async fn main() -> Result<(), actix_web::Error> {
         App::new()
             .configure(routes::routes)
             .wrap(Logger::default())
-            .data(establish_connection().clone())
+            .data(establish_connection())
     })
     .bind(&bind)?
     .run()

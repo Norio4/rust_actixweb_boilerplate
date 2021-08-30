@@ -4,6 +4,8 @@ extern crate rust_actixweb_boilerplate as app;
 use crate::app::util::{establish_connection, init_pool};
 use crate::app::routes;
 use actix_web::{App, HttpServer, middleware::Logger};
+use actix_web::http::header;
+use actix_cors::Cors;
 use dotenv::dotenv;
 
 #[actix_rt::main]
@@ -21,6 +23,15 @@ async fn main() -> Result<(), actix_web::Error> {
         App::new()
             .configure(routes::routes)
             .wrap(Logger::default())
+            .wrap(
+                Cors::default()
+                    .allowed_origin("http://localhost:3000")
+                    .allowed_origin("http://example.com")
+                    .allowed_methods(vec!["OPTIONS", "HEAD", "GET", "PATCH", "POST"])
+                    .allowed_headers(vec![header::AUTHORIZATION, header::ACCEPT])
+                    .allowed_header(header::CONTENT_TYPE)
+                    .max_age(3600)
+            )
             .data(establish_connection())
     })
     .bind(&bind)?

@@ -20,18 +20,21 @@ async fn main() -> Result<(), actix_web::Error> {
     let bind = "0.0.0.0:3000";
 
     HttpServer::new(move || {
+        let origins = vec![
+            "http://localhost:3000",
+            "http://localhost:9090",
+        ];
+        let cors: Cors = origins.iter().fold(
+            Cors::default(), |cors, origin|
+                cors.allowed_origin(origin)
+                .allowed_methods(vec!["OPTIONS", "HEAD", "GET", "PATCH", "POST"])
+                .supports_credentials()
+        );
+
         App::new()
             .configure(routes::routes)
             .wrap(Logger::default())
-            .wrap(
-                Cors::default()
-                    .allowed_origin("http://localhost:3000")
-                    .allowed_origin("http://example.com")
-                    .allowed_methods(vec!["OPTIONS", "HEAD", "GET", "PATCH", "POST"])
-                    .allowed_headers(vec![header::AUTHORIZATION, header::ACCEPT])
-                    .allowed_header(header::CONTENT_TYPE)
-                    .max_age(3600)
-            )
+            .wrap(cors)
             .data(establish_connection())
     })
     .bind(&bind)?

@@ -4,7 +4,6 @@ extern crate rust_actixweb_boilerplate as app;
 use crate::app::util::{establish_connection, init_pool};
 use crate::app::routes;
 use actix_web::{App, HttpServer, middleware::Logger};
-use actix_web::http::header;
 use actix_cors::Cors;
 use dotenv::dotenv;
 

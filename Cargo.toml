@@ -7,8 +7,11 @@ categories = ["rust", "actix_web", "diesel", "boilerplate"]
 license = "MIT"
 
 [dependencies]
-actix-rt = "1.1.1"
-actix-web = "3.3.2"
+# Web Server
+actix-rt = "2"
+actix-web = { version = "4.0.0-beta.18", default_features = false }
+actix-cors = "0.6.0-beta.7"
+
 askama = "0.10.5"
 thiserror = "1.0.26"
 diesel = { version = "1.4.8", features = ["postgres", "r2d2"] }
@@ -16,4 +19,3 @@ dotenv = "0.15.0"
 serde = { version = "1.0", features = ["derive"]}
 env_logger = "0.9.0"
 diesel_migrations = "1.4.0"
-actix-cors = "0.5.4"

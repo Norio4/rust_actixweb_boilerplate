@@ -28,6 +28,25 @@ diesel setup
 cargo run
 ```
 
+## Recommend linker
+  * [Mold](https://github.com/rui314/mold)
+    * install
+      ```
+        sudo apt-get update -y; sudo apt-get install -y build-essential git clang cmake libstdc++-10-dev libssl-dev libxxhash-dev zlib1g-dev
+        cd /tmp/
+        git clone https://github.com/rui314/mold.git
+        cd mold
+        git checkout v1.0.1
+        make -j$(nproc)
+        sudo make install
+      ```
+    * update config.toml
+      ```
+        [target.x86_64-unknown-linux-gnu]
+        linker = "clang"
+        rustflags = ["-C", "link-arg=-fuse-ld=/path/to/mold"]
+      ```
+
 ## Troubleshooting
 
 ###  failed to run custom build command for `openssl-sys v0.9.xx`

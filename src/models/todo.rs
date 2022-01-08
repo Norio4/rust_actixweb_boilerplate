@@ -1,35 +1,34 @@
-use diesel::pg::PgConnection;
-use diesel::r2d2::{ ConnectionManager };
-use actix_web::{web};
-use diesel::prelude::*;
-use serde::{Deserialize, Serialize};
 use crate::schema::todos;
 use crate::schema::todos::dsl::*;
+use actix_web::web;
+use diesel::pg::PgConnection;
+use diesel::prelude::*;
+use diesel::r2d2::ConnectionManager;
+use serde::{Deserialize, Serialize};
 
 type PgDbPool = diesel::r2d2::Pool<ConnectionManager<PgConnection>>;
 
 #[derive(Queryable, Serialize, Deserialize, Debug)]
-pub struct Todo  {
+pub struct Todo {
     pub id: i32,
     pub text: String,
 }
 
 #[derive(Identifiable, Queryable, Serialize, Deserialize, Debug)]
-#[table_name="todos"]
+#[table_name = "todos"]
 pub struct UpdateTodo {
     pub id: i32,
     pub text: String,
 }
 
 #[derive(Insertable, Deserialize, Debug)]
-#[table_name="todos"]
+#[table_name = "todos"]
 pub struct NewTodo {
     pub text: String,
 }
 
 impl Todo {
-
-    pub  fn all(pool: web::Data<PgDbPool>) -> Result<Vec<Todo>, diesel::result::Error> {
+    pub fn all(pool: web::Data<PgDbPool>) -> Result<Vec<Todo>, diesel::result::Error> {
         let conn = pool.get().unwrap();
         let items = todos.load::<Todo>(&conn)?;
         Ok(items)
@@ -50,7 +49,10 @@ impl Todo {
         Ok(items.pop().unwrap())
     }
 
-    pub fn update(pool: web::Data<PgDbPool>, update_todo: UpdateTodo) -> Result<Todo, diesel::result::Error> {
+    pub fn update(
+        pool: web::Data<PgDbPool>,
+        update_todo: UpdateTodo,
+    ) -> Result<Todo, diesel::result::Error> {
         let conn = pool.get().unwrap();
 
         let row = diesel::update(todos)
@@ -64,8 +66,7 @@ impl Todo {
     pub fn delete(pool: web::Data<PgDbPool>, todo_id: i32) -> Result<usize, diesel::result::Error> {
         let conn = pool.get().unwrap();
 
-        let count = diesel::delete(todos.find(todo_id))
-                        .execute(&conn)?;
+        let count = diesel::delete(todos.find(todo_id)).execute(&conn)?;
         Ok(count)
     }
 }

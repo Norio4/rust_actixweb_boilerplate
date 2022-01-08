@@ -47,6 +47,14 @@ cargo run
         rustflags = ["-C", "link-arg=-fuse-ld=/path/to/mold"]
       ```
 
+## Develop
+
+```
+
+$ ./action.sh
+
+```
+
 ## Troubleshooting
 
 ###  failed to run custom build command for `openssl-sys v0.9.xx`

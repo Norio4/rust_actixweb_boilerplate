@@ -1,5 +1,5 @@
-use actix_web::{web};
 use crate::controllers::todos;
+use actix_web::web;
 
 pub fn routes(cfg: &mut web::ServiceConfig) {
     cfg.route("/", web::get().to(todos::index));

@@ -5,8 +5,13 @@ extern crate rust_actixweb_boilerplate as app;
 use crate::app::routes;
 use crate::app::util::{establish_connection, init_pool};
 use actix_cors::Cors;
-use actix_web::{middleware::Logger, App, HttpServer};
+use actix_web::http::header;
+use actix_web::web;
+use actix_web::{http, middleware::Logger, App, HttpServer};
 use dotenv::dotenv;
+use log::info;
+
+use crate::app::config_initializer::ConfigInitializer;
 
 #[actix_rt::main]
 async fn main() -> Result<(), actix_web::Error> {
@@ -16,18 +21,29 @@ async fn main() -> Result<(), actix_web::Error> {
 
     run_migrations();
 
-    let bind = "0.0.0.0:3000";
+    let port = std::env::var("APP_PORT").expect("APP_PORT must be set");
+    let bind = format!("0.0.0.0:{}", port);
+
+    info!("Start Config Initializer");
+    let config_file = "config/app.yml";
+    let ci = ConfigInitializer {
+        config_file: config_file.to_string(),
+    };
+    let app_config = ci.initialize();
+    let cors_vec: Vec<String> = ci.get_cors_origins();
 
     HttpServer::new(move || {
-        let origins = vec!["http://localhost:3000", "http://localhost:9090"];
-        let cors: Cors = origins.iter().fold(Cors::default(), |cors, origin| {
+        let cors: Cors = cors_vec.iter().fold(Cors::default(), |cors, origin| {
             cors.allowed_origin(origin)
-                .allowed_methods(vec!["OPTIONS", "HEAD", "GET", "PATCH", "POST"])
+                .allowed_methods(vec!["OPTIONS", "HEAD", "GET", "POST"])
+                .allowed_header(http::header::CONTENT_TYPE)
+                .allowed_headers(&[header::AUTHORIZATION, header::ACCEPT])
                 .supports_credentials()
         });
 
         App::new()
             .configure(routes::routes)
+            .app_data(web::Data::new(app_config.clone()))
             .wrap(Logger::default())
             .wrap(cors)
             .app_data(establish_connection())

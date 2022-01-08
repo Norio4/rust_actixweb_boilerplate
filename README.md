@@ -14,6 +14,7 @@ The Rust Actix_Web Boilerplate is a boilerplate for developers who want to get s
 
 * start postgrsql server
 * rename .env.sample to .env
+* rename config/app.sample.yml config/app.yml
 * change value of DATABASE_URL in .env
 * run below commands
 

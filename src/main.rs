@@ -30,7 +30,7 @@ async fn main() -> Result<(), actix_web::Error> {
             .configure(routes::routes)
             .wrap(Logger::default())
             .wrap(cors)
-            .data(establish_connection())
+            .app_data(establish_connection())
     })
     .bind(&bind)?
     .run()

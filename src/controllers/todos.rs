@@ -79,7 +79,9 @@ pub async fn create(
     };
 
     let _output_todo = Todo::create(pool, new_todo).unwrap();
-    Ok(HttpResponse::Found().header("Location", "/").finish())
+    Ok(HttpResponse::Found()
+        .append_header(("Location", "/"))
+        .finish())
 }
 
 pub async fn update(
@@ -95,7 +97,9 @@ pub async fn update(
     };
 
     let _output_todo = Todo::update(pool, update_todo).unwrap();
-    Ok(HttpResponse::Found().header("Location", "/").finish())
+    Ok(HttpResponse::Found()
+        .append_header(("Location", "/"))
+        .finish())
 }
 
 pub async fn delete(
@@ -106,5 +110,7 @@ pub async fn delete(
     println!("{:?}", params);
 
     let _output_todo = Todo::delete(pool, params.id).unwrap();
-    Ok(HttpResponse::Found().header("Location", "/").finish())
+    Ok(HttpResponse::Found()
+        .append_header(("Location", "/"))
+        .finish())
 }

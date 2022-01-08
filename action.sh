@@ -14,7 +14,7 @@ if [ $? -ne 0 ]; then
   exit 1
 fi
 echo "===== cargo clippy ======"
-cargo clippy
+cargo clippy -- -D warnings
 if [ $? -ne 0 ]; then
   echo "FAILED ACTION: cargo clippy failed"
   exit 1

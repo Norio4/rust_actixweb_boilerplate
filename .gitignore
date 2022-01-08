@@ -1,3 +1,4 @@
 /target
 /postgresql-data
 .env
+config/app.yml
